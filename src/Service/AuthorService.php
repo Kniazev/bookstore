@@ -26,11 +26,13 @@ class AuthorService implements AuthorServiceInterface
 
     /**
      * @param Author $author
-     * @return void
+     * @return Author
      */
-    public function create(Author $author): void
+    public function create(Author $author): Author
     {
         $this->authorRepository->add($author);
+
+        return $author;
     }
 
     /**
@@ -43,12 +45,19 @@ class AuthorService implements AuthorServiceInterface
 
     /**
      * @param int $id
-     * @return void
+     * @return bool
      */
-    public function delete(int $id): void
+    public function delete(int $id): bool
     {
         $author = $this->authorRepository->find($id);
+
+        if (empty($author)) {
+            return false;
+        }
+
         $this->authorRepository->removeAndCommit($author);
+
+        return true;
     }
 
     /**

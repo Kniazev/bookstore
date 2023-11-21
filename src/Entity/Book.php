@@ -39,7 +39,6 @@ class Book
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Assert\Type('float')
      */
     private $price;
 
