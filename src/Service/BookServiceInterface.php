@@ -8,9 +8,9 @@ interface BookServiceInterface
 {
     /**
      * @param Book $book
-     * @return void
+     * @return Book
      */
-    public function create(Book $book): void;
+    public function create(Book $book): Book;
 
     /**
      * @param int $id
@@ -30,9 +30,9 @@ interface BookServiceInterface
 
     /**
      * @param int $id
-     * @return void
+     * @return bool
      */
-    public function delete(int $id): void;
+    public function delete(int $id): bool;
 
     /**
      * @param int $bookId

@@ -11,9 +11,9 @@ interface AuthorServiceInterface
 {
     /**
      * @param Author $author
-     * @return void
+     * @return Author
      */
-    public function create(Author $author): void;
+    public function create(Author $author): Author;
 
     /**
      * @param int $id
@@ -33,9 +33,9 @@ interface AuthorServiceInterface
 
     /**
      * @param int $id
-     * @return void
+     * @return bool
      */
-    public function delete(int $id): void;
+    public function delete(int $id): bool;
 
     /**
      * @param int $bookId
