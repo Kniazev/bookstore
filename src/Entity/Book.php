@@ -33,7 +33,6 @@ class Book
 
     /**
      * @ORM\Column(type="date", nullable=true)
-     * @Assert\DateTime()
      */
     private $publicationDate;
 
@@ -103,6 +102,11 @@ class Book
         $this->price = $price;
 
         return $this;
+    }
+
+    public function getAuthors(): Collection
+    {
+        return $this->authors;
     }
 
     public function addAuthor(Author $author): self
