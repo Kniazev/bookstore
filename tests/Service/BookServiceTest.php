@@ -10,8 +10,10 @@ use App\Tests\MockEntities;
 
 class BookServiceTest extends AbstractCustomTest
 {
+
     private MockEntities $mockEntities;
     private Object $bookRepository;
+    private BookServiceInterface $bookService;
 
     protected function setUp(): void
     {
@@ -19,43 +21,85 @@ class BookServiceTest extends AbstractCustomTest
 
         $this->mockEntities = new MockEntities();
         $this->bookRepository = $this->getRepositoryForEntity(Book::class);
+        $this->bookService = new BookService($this->bookRepository);
     }
 
-    public function testGetById()
+    /**
+     * @return void
+     */
+    public function testGetById(): void
     {
-        $foundBook = $this->bookRepository->findOneBy(['title'=> self::BOOK_TEST_TITLE]);
-        $this->assertNotEmpty($foundBook);
+        $insertedBook = $this->addBookToDB();
+
+        $foundBook = $this->bookService->GetById($insertedBook->getId());
+        $this->assertEquals($insertedBook->getTitle(), $foundBook->getTitle());
     }
 
-    public function testDelete()
+    /**
+     * @return void
+     */
+    public function testDelete(): void
+    {
+        $insertedBook = $this->addBookToDB();
+
+        $this->assertTrue($this->bookService->delete($insertedBook->getId()));
+    }
+
+    /**
+     * @return void
+     */
+    public function testCreate(): void
+    {
+        $expectedBook = $this->mockEntities->createBook();
+
+        $insertedBook = $this->bookService->create($expectedBook);
+
+        $this->assertEquals($expectedBook->getTitle(), $insertedBook->getTitle());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetBooksByAuthorId(): void
+    {
+        $foundBooks =  $this->bookRepository->getBooksByAuthorId($this->author->getId());
+
+        $this->assertNotEmpty($foundBooks);
+    }
+
+    /**
+     * @return void
+     */
+    public function testUpdate(): void
+    {
+        $expectedBook = $this->addBookToDB();
+
+        $expectedBook->setTitle('New title');
+        $this->bookService->update();
+
+        $updatedBook = $this->entityManager->find(Book::class, $expectedBook->getId());
+
+        $this->assertEquals($expectedBook, $updatedBook);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetAll(): void
+    {
+        $this->assertNotEmpty($this->bookService->getAll());
+    }
+
+    /**
+     * @return Book
+     */
+    private function addBookToDB(): Book
     {
         $book = $this->mockEntities->createBook();
 
-        $this->bookRepository->add($book, true);
+        $this->entityManager->persist($book);
+        $this->entityManager->flush();
 
-        $this->bookRepository->delete($book->getId());
-        $foundBook = $this->bookRepository->find($book->getId());
-
-        $this->assertEmpty($foundBook);
-    }
-
-    public function testCreate()
-    {
-
-    }
-
-    public function testGetBooksByAuthorId()
-    {
-
-    }
-
-    public function testUpdate()
-    {
-
-    }
-
-    public function testGetAll()
-    {
-
+        return $book;
     }
 }

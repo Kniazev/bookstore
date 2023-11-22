@@ -14,7 +14,7 @@ abstract class AbstractCustomTest extends KernelTestCase
     protected const BOOK_TEST_TITLE = 'Test book';
     protected CONST BOOK_INSERTED_TEST_TITLE = 'Test inserted book';
 
-    protected EntityManagerInterface $em;
+    protected EntityManagerInterface $entityManager;
     protected Book $book;
     protected Book $book1;
     protected Author $author;
@@ -46,7 +46,7 @@ abstract class AbstractCustomTest extends KernelTestCase
         $this->entityManager->flush();
     }
 
-    protected function getRepositoryForEntity(string $entityClass): Object
+    protected function getRepositoryForEntity(string $entityClass)
     {
         return $this->entityManager->getRepository($entityClass);
     }
@@ -56,6 +56,5 @@ abstract class AbstractCustomTest extends KernelTestCase
         parent::tearDown();
 
         $this->entityManager->close();
-        $this->entityManager = null;
     }
 }

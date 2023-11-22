@@ -8,7 +8,7 @@ use App\Tests\MockEntities;
 use App\Entity\Book;
 
 
-class BookRepositoryTest extends AbstractCustomTest
+abstract class BookRepositoryTest extends AbstractCustomTest
 {
     private MockEntities $mockEntities;
     private Object $bookRepository;
