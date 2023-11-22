@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Author;
+use Doctrine\ORM\Query;
 
 
 interface AuthorServiceInterface
@@ -37,10 +38,10 @@ interface AuthorServiceInterface
      */
     public function delete(int $id): bool;
 
-    /**
+    /***
      * @param int $bookId
-     * @return array|null
+     * @return Query
      */
-    public function getAuthorsByBooksId(int $bookId): ?array;
+    public function getAuthorsByBooksId(int $bookId): Query;
 
 }

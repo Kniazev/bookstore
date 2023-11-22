@@ -42,8 +42,7 @@ class BookRepository extends ServiceEntityRepository
             ->leftJoin('book.authors', 'authors')
             ->where('authors.id = :id')
             ->setParameter('id', $authorId)
-            ->getQuery()
-            ->execute();
+            ->getQuery();
     }
 
     public function remove(Book $entity, bool $flush = false): void

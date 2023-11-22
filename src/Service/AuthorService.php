@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\Author;
 use App\Repository\AuthorRepository;
+use Doctrine\ORM\Query;
 use phpDocumentor\Reflection\Types\Collection;
 
 
@@ -79,9 +80,9 @@ class AuthorService implements AuthorServiceInterface
 
     /**
      * @param int $bookId
-     * @return array|null
+     * @return Query
      */
-    public function getAuthorsByBooksId(int $bookId): ?array
+    public function getAuthorsByBooksId(int $bookId): Query
     {
         return $this->authorRepository->getAuthorsByBooksId($bookId);
     }

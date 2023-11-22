@@ -33,8 +33,7 @@ class AuthorRepository extends ServiceEntityRepository
             ->leftJoin('author.books', 'books')
             ->where('books.id = :id')
             ->setParameter('id', $bookId)
-            ->getQuery()
-            ->execute();
+            ->getQuery();
     }
 
     public function add(Author $entity, bool $flush = false): void

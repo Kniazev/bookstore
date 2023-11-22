@@ -104,11 +104,6 @@ class Book
         return $this;
     }
 
-    public function getAuthors(): Collection
-    {
-        return $this->authors;
-    }
-
     public function addAuthor(Author $author): self
     {
         if (!$this->authors->contains($author)) {
