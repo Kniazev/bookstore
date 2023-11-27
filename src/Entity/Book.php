@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\BookRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -46,9 +47,15 @@ class Book
      */
     private $authors;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Order::class, mappedBy="items")
+     */
+    private $orders;
+
     public function __construct()
     {
         $this->authors = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
