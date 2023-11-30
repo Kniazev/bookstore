@@ -7,7 +7,7 @@ namespace App\Service;
 use App\Entity\Author;
 use App\Repository\AuthorRepository;
 use Doctrine\ORM\Query;
-use phpDocumentor\Reflection\Types\Collection;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
 class AuthorService implements AuthorServiceInterface
@@ -17,12 +17,15 @@ class AuthorService implements AuthorServiceInterface
      */
     private AuthorRepository $authorRepository;
 
+    private ValidatorInterface $validator;
+
     /**
      * @param AuthorRepository $authorRepository
      */
-    public function __construct(AuthorRepository $authorRepository)
+    public function __construct(AuthorRepository $authorRepository, ValidatorInterface $validator)
     {
         $this->authorRepository = $authorRepository;
+        $this->validator = $validator;
     }
 
     /**
@@ -85,5 +88,29 @@ class AuthorService implements AuthorServiceInterface
     public function getAuthorsByBooksId(int $bookId): Query
     {
         return $this->authorRepository->getAuthorsByBooksId($bookId);
+    }
+
+    /**
+     * @param int $authorId
+     * @param array $books
+     * @return bool
+     */
+    public function addBooks(int $authorId, array $books): bool
+    {
+        if (empty($books) || empty($authorId)) {
+            return false;
+        }
+
+        $author = $this->getById($authorId);
+
+        foreach ($books as $book) {
+            $this->validator->validate($book);
+
+            $author->addBook($book);
+        }
+
+        $this->update();
+
+        return true;
     }
 }

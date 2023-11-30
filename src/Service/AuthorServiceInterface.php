@@ -44,4 +44,11 @@ interface AuthorServiceInterface
      */
     public function getAuthorsByBooksId(int $bookId): Query;
 
+    /**
+     * @param int $authorId
+     * @param array $books
+     * @return bool
+     */
+    public function addBooks(int $authorId, array $books): bool;
+
 }
