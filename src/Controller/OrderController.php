@@ -3,11 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Order;
-use App\Service\BookService;
 use App\Service\BookServiceInterface;
-use App\Service\OrderService;
 use App\Service\OrderServiceInterface;
-use PHPUnit\Util\Xml\Validator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -85,7 +82,7 @@ class OrderController extends AbstractController
 
         $errors = $validator->validate($order);
 
-        if (!empty($errors)) {
+        if (count($errors) > 0) {
             return $this->json(
                 [
                     'Something went wrong',

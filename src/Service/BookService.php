@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\Book;
 use App\Repository\BookRepository;
+use Doctrine\ORM\Query;
 
 
 class BookService implements BookServiceInterface
@@ -78,10 +79,58 @@ class BookService implements BookServiceInterface
 
     /**
      * @param int $authorId
-     * @return array|null
+     * @return Query
      */
-    public function getBooksByAuthorId(int $authorId): ?array
+    public function getBooksByAuthorId(int $authorId): Query
     {
         return $this->bookRepository->getBooksByAuthorId($authorId);
+    }
+
+    /**
+     * @param int $authorId
+     * @param array $books
+     * @return bool
+     */
+    public function addBooks(int $authorId, array $books): bool
+    {
+        if (empty($books) || empty($authorId)) {
+            return false;
+        }
+
+        $author = $this->getById($authorId);
+
+        foreach ($books as $book) {
+            $this->validator->validate($book);
+
+            $author->addBook($book);
+        }
+
+        $this->update();
+
+        return true;
+    }
+
+    /**
+     * @param int $bookId
+     * @param array $authors
+     * @return bool
+     */
+    public function addAuthors(int $bookId, array $authors): bool
+    {
+        if (empty($authors) || empty($bookId)) {
+            return false;
+        }
+
+        $book = $this->getById($bookId);
+
+        foreach ($authors as $author) {
+            $this->validator->validate($author);
+
+            $book->addBook($author);
+        }
+
+        $this->update();
+
+        return true;
     }
 }

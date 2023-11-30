@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Book;
+use Doctrine\ORM\Query;
 
 interface BookServiceInterface
 {
@@ -36,7 +37,7 @@ interface BookServiceInterface
 
     /**
      * @param int $bookId
-     * @return array|null
+     * @return Query
      */
-    public function getBooksByAuthorId(int $bookId): ?array;
+    public function getBooksByAuthorId(int $bookId): Query;
 }
