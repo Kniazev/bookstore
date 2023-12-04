@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 
@@ -35,13 +36,32 @@ class BookRepository extends ServiceEntityRepository
         }
     }
 
-    public function getBooksByAuthorId(int $authorId)
+    /**
+     * @param int $authorId
+     * @return Query
+     */
+    public function getBooksByAuthorId(int $authorId): Query
     {
         return $this->createQueryBuilder('book')
             ->select('book')
             ->leftJoin('book.authors', 'authors')
             ->where('authors.id = :id')
             ->setParameter('id', $authorId)
+            ->getQuery();
+    }
+
+    /**
+     * @param string $name
+     * @return Query
+     */
+    public function getBooksByAuthorName(string $name): Query
+    {
+        return $this->createQueryBuilder('book')
+            ->select('book')
+            ->leftJoin('book.authors', 'authors')
+            ->where('authors.firstName = :name')
+            ->orWhere('authors.lastName = :name')
+            ->setParameter('name', $name)
             ->getQuery();
     }
 

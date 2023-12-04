@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Service\AuthorServiceInterface;
@@ -7,7 +9,9 @@ use App\Service\BookServiceInterface;
 use App\DTO\BookDTO;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 class BookController extends AbstractController
 {
@@ -42,6 +46,27 @@ class BookController extends AbstractController
     public function getBookById($id): JsonResponse
     {
         $book = $this->bookService->getById($id);
+
+        if (empty($book)) {
+            return $this->json([
+                'Book is not exist',
+            ]);
+        }
+
+        return $this->json([
+            'book' => $book,
+            'authors' => $this->authorService->getAuthorsByBooksId($book->getId())->execute(),
+        ]);
+    }
+
+    /**
+     * @Route("/books/search", name="app_books_search")
+     */
+    public function getBookByTitle(Request $request): JsonResponse
+    {
+        $context = json_decode($request->getContent(), true);
+
+        $book = $this->bookService->getBookByTitle($context['title']);
 
         if (empty($book)) {
             return $this->json([

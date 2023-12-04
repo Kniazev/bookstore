@@ -40,4 +40,16 @@ interface BookServiceInterface
      * @return Query
      */
     public function getBooksByAuthorId(int $bookId): Query;
+
+    /**
+     * @param string $title
+     * @return Book
+     */
+    public function getBookByTitle(string $title): Book;
+
+    /**
+     * @param string $name
+     * @return Query
+     */
+    public function getBooksByAuthorName(string $name): Query;
 }
