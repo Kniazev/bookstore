@@ -133,4 +133,22 @@ class BookService implements BookServiceInterface
 
         return true;
     }
+
+    /**
+     * @param string $title
+     * @return Book
+     */
+    public function getBookByTitle(string $title): Book
+    {
+        return $this->bookRepository->findOneBy(['title' => $title]);
+    }
+
+    /**
+     * @param string $name
+     * @return Query
+     */
+    public function getBooksByAuthorName(string $name): Query
+    {
+        return $this->bookRepository->getBooksByAuthorName($name);
+    }
 }
