@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Service\PhoneValidationInterface;
 use App\Service\UserServiceInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,6 +15,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+
 
 class AuthController extends AbstractController
 {
@@ -32,8 +36,11 @@ class AuthController extends AbstractController
     /**
      * @Route("/registration", name="app_registration", methods={"POST"})
      */
-    public function register(Request $request, ValidatorInterface $validator): JsonResponse
-    {
+    public function register(
+        Request $request,
+        ValidatorInterface $validator,
+        PhoneValidationInterface $phoneValidation
+    ): JsonResponse {
         $context = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         $user = new User();
@@ -42,6 +49,16 @@ class AuthController extends AbstractController
         $user->setLastName($context['last_name']);
         $user->setFristName($context['first_name']);
         $user->setTelephoneNumber($context['telephone_number']);
+
+        if (!$phoneValidation->isValid($user->getTelephoneNumber())) {
+            return $this->json(
+                [
+                    'The phone number is not valid',
+                ],
+                400
+            );
+        }
+
         $user->setAddress($context['address']);
         $user->setPassword($this->hasher->hashPassword($user, $context['password']));
 
