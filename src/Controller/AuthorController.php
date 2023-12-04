@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Service\AuthorServiceInterface;
@@ -29,9 +31,7 @@ class AuthorController extends AbstractController
     public function authorsList(): JsonResponse
     {
         return $this->json([
-            !empty($authors = $this->authorService->getAll())
-                ? $authors
-                : null,
+            $this->authorService->getAll(),
         ]);
     }
 
@@ -41,9 +41,7 @@ class AuthorController extends AbstractController
     public function getAuthorById(int $id): JsonResponse
     {
         return $this->json([
-            !empty($author = $this->authorService->getById($id))
-                ? $author
-                : null,
+            $this->authorService->getById($id),
         ]);
     }
 
@@ -53,9 +51,7 @@ class AuthorController extends AbstractController
     public function getAuthorBooks(int $id): JsonResponse
     {
         return $this->json([
-            !empty($books = $this->bookService->getBooksByAuthorId($id))
-                ? $books
-                : null,
+            $this->bookService->getBooksByAuthorId($id),
         ]);
     }
 }
